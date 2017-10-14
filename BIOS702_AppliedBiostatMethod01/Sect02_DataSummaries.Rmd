@@ -1,5 +1,166 @@
 ---
-title: "BIOS702 Sect02 Data Summaries and Displays"
-output: html_document
+title: "Section 02: Data Summaries and Displays"
+author: Clint ko
+date: Oct 13, 2017
+#output: 
+    #beamer_presentation:
+    #    theme: boxes
+    #    color: crane
+    #    df_print: kable
+    #    slide_level: 1
 ---
+# set environment
+```{r}
+library(dplyr)
+library(tidyr)
+library(datasets)
+```
+
+
+# Plotting PMF/PDF and CDF
+
+## Discrete Variable
+
+Example: Binomial Random Variable
+```{r}
+samp = rbinom(n=1000,size=15,p=0.3)
+freq = as.data.frame(table(samp))
+```
+
+---
+
+Plot Probability Mass Function
+```{r}
+# x and y values
+x = as.numeric(as.vector(freq$samp))
+y = as.numeric(as.vector(freq$Freq))
+
+# Scatter Plot
+# Ref: https://stackoverflow.com/questions/24931006/r-simple-scatter-plot-with-vertical-lines
+plot(x,y,pch=21,col=1,bg=2,axes=FALSE,ann=FALSE)
+axis(1, at=seq(0,15,1))
+axis(2, at=pretty(c(0, max(y))))
+mtext("Frequency", side=2, line=2.5)
+mtext("PMF of a binomial r.v.", side=3, line=0.5, adj=0, font=2)
+segments(x0=x, y0=y, y1=0, col=8)
+```
+
+---
+
+Plot Cumulative Distribution
+```{r}
+# create cdf function
+cdf = ecdf(samp)
+#x = 0:12
+#y = cdf(x)
+
+# Plot cumulative distribution function
+plot(cdf,pch=20,col=1,bg=2,axes=FALSE,ann=FALSE)
+axis(1, at=seq(0,15,1))
+axis(2, at=pretty(c(0, 1)))
+mtext("Frequency", side=2, line=2.5)
+mtext("CMF of a binomial r.v.", side=3, line=0.5, adj=0, font=2)
+```
+
+## Continuous Random Variable
+
+Example: Normal random variable
+```{r}
+samp = rnorm(n=1000,mean=10,sd=1)
+freq = as.data.frame(table(samp))
+```
+
+---
+
+Plot Probability Density Distribution
+```{r}
+# histogram
+hist(samp, prob=TRUE, breaks=seq(min(samp)*0.9, max(samp)*1.1, 0.2), col="grey50")
+
+# Density
+d = density(samp)
+lines(d, col="blue", lwd=2)
+```
+
+---
+
+Plot Cumulative Distribution Function
+```{r}
+# create cdf function
+cdf = ecdf(samp)
+#x = 0:12
+#y = cdf(x)
+
+# Plot cumulative distribution function
+plot(cdf,pch=20,col=1,bg=2,axes=FALSE,ann=FALSE)
+axis(1, at=seq(0,15,1))
+axis(2, at=pretty(c(0, 1)))
+mtext("Frequency", side=2, line=2.5)
+mtext("CMF of a binomial r.v.", side=3, line=0.5, adj=0, font=2)
+```
+
+
+---
+# Horizontal, Vertial, Stacked Bar Charts
+
+Reference
+- https://www.r-bloggers.com/stacked-bar-charts-in-r/
+- http://www.statmethods.net/graphs/bar.html
+
+```{r}
+counts <- table(mtcars$vs, mtcars$gear)
+counts
+```
+
+---
+
+```{r}
+#
+cols = c("#66c2a5","#fb8072") # green, red
+
+#
+barplot(
+    counts, 
+    main="Car Distribution by Gears and VS",
+    xlab="Number of Gears", 
+    col=cols,
+    xlim=c(0,5))
+
+# legend
+legend("bottomright", 
+   legend = rev(rownames(counts)), #in order from top to bottom
+   fill = rev(cols), # reorders so legend order matches graph
+   title = "Test01")
+```
+
+---
+
+```{r}
+#
+cols =c("#80b1d3","#66c2a5","#fb8072") # blue, green, red
+
+#
+barplot(
+    t(counts), 
+    main="Car Distribution by Gears and VS",
+    xlab="Number of Gears", 
+    col=cols,
+    xlim=c(0,5))
+
+# legend
+legend("bottomright", 
+   legend = rev(colnames(counts)), #in order from top to bottom
+   fill = rev(cols), # reorders so legend order matches graph
+   title = "Test02")
+```
+
+---
+# Histogram
+
+
+---
+# Scatter Plot & Matrix Plot
+
+---
+# Box Plot
 
